@@ -1,7 +1,7 @@
 {
     "name" : "SO Commission",
     "version" : "17.0.1.0.0",
-    'depends' : ['sale_management', 'sale'],
+    'depends' : ['sale_management', 'sale','account'],
     'data': [
         'views/sale_order_views.xml',
     ],
