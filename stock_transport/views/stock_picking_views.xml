@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_volume_vpicktree" model="ir.ui.view">
+        <field name="name">stock.picking.tree.inherit.stock.transport</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="picking_volume"/>
+                <field name="picking_weight"/>
+            </xpath> 
+        </field>
+    </record>
+</odoo>

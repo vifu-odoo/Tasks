@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="stock_picking_batch_form" model="ir.ui.view">
+        <field name="name">stock.picking.batch.form.inherit.stock.transport</field>
+        <field name="model">stock.picking.batch</field>
+         <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                <field name="dock_id"/>
+                <field name="vehicle" placeholder="Third Party Provider"/>
+                <field name="vehicle_category" placeholder="e.g. Semi-truck"/>
+                <field name="weight_progress" widget="progressbar" invisible="not vehicle_category"/>
+                <field name="volume_progress" widget="progressbar" invisible="not vehicle_category"/>
+            </xpath> 
+        </field>
+    </record> 
+
+    <!-- Graph view -->
+    <record id="view_stock_picking_batch_graph" model="ir.ui.view">
+        <field name="name">stock.picking.batch.graph</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="arch" type="xml">
+            <graph string="Batch Transfers graph">
+                <field name="scheduled_date" type='row'/>
+                <field name="vehicle_category" type='column'/>
+                <field name="lines"/>
+                <field name="transfers"/>
+                <field name ="volume_progress"/>
+                <field name ="weight_progress"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="stock_picking_batch.stock_picking_batch_action" model="ir.actions.act_window">
+        <field name="view_mode">tree,kanban,form,graph</field>
+    </record>
+
+    <!-- Gantt View -->
+    <record id="view_stock_picking_batch_gantt" model="ir.ui.view">
+        <field name="name">stock.picking.batch.gantt</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="arch" type="xml">
+            <gantt date_start="starting_date" date_stop="stoping_date" string="Transport Operations" default_group_by='dock_id,vehicle' default_scale="week" thumbnails="{'vehicle': 'image_128'}" color="vehicle" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+                <field name="state"/>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="stock_picking_batch.stock_picking_batch_action" model="ir.actions.act_window">
+        <field name="view_mode">tree,kanban,form,graph,gantt</field>
+    </record>
+</odoo>
