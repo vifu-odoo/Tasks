@@ -6,13 +6,26 @@
         <field name="model">stock.picking.batch</field>
          <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='scheduled_date']" position="after">
-                <field name="dock_id"/>
-                <field name="vehicle" placeholder="Third Party Provider"/>
-                <field name="vehicle_category" placeholder="e.g. Semi-truck"/>
-                <field name="weight_progress" widget="progressbar" invisible="not vehicle_category"/>
-                <field name="volume_progress" widget="progressbar" invisible="not vehicle_category"/>
-            </xpath> 
+            <field name="scheduled_date" position="replace">
+                <group class="w-100">
+                    <field name="dock_id"/>
+                    <field name="vehicle" placeholder="Third Party Provider"/>
+                    <field name="vehicle_category" placeholder="e.g. Semi-truck"/>
+                </group>
+                <group class="w-100" invisible="not vehicle_category">
+                    <label for="weight_progress"/>
+                    <div class="o_row w-100">
+                        <field name="total_weight"/>
+                        <field name="weight_progress" widget="progressbar" class="oe_inline"/>
+                    </div>
+
+                    <label for="volume_progress"/>
+                    <div class="o_row w-100">
+                        <field name="total_volume"/>
+                        <field name="volume_progress" widget="progressbar" class="oe_inline"/>
+                    </div>
+                </group>
+            </field> 
         </field>
     </record> 
 
@@ -32,22 +45,32 @@
         </field>
     </record>
 
-    <record id="stock_picking_batch.stock_picking_batch_action" model="ir.actions.act_window">
-        <field name="view_mode">tree,kanban,form,graph</field>
-    </record>
-
     <!-- Gantt View -->
     <record id="view_stock_picking_batch_gantt" model="ir.ui.view">
         <field name="name">stock.picking.batch.gantt</field>
         <field name="model">stock.picking.batch</field>
         <field name="arch" type="xml">
-            <gantt date_start="starting_date" date_stop="stoping_date" string="Transport Operations" default_group_by='dock_id,vehicle' default_scale="week" thumbnails="{'vehicle': 'image_128'}" color="vehicle" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+            <gantt date_start="scheduled_date" date_stop="scheduled_date" string="Transport Operations" default_group_by='dock_id,vehicle' default_scale="week" thumbnails="{'vehicle': 'image_128'}" color="vehicle" decoration-info="state == 'draft'" decoration-success="state == 'done'">
                 <field name="state"/>
+                <field name="name"/>
+                <field name="weight_progress"/>
+                <field name="volume_progress"/>
+                <templates>
+                    <div t-name="gantt-popover" class="container-fluid">
+                        <div class="row g-0">
+                            <div class="col">
+                                <ul class="ps-1 mb-0 list-unstyled">
+                                    <li><strong><t t-esc="name"/></strong> <t t-esc="weight_progress"/> Kg <t t-esc="volume_progress"/> m^3</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </templates>    
             </gantt>
         </field>
     </record>
 
     <record id="stock_picking_batch.stock_picking_batch_action" model="ir.actions.act_window">
-        <field name="view_mode">tree,kanban,form,graph,gantt</field>
+        <field name="view_mode">tree,form,kanban,graph,gantt</field>
     </record>
 </odoo>

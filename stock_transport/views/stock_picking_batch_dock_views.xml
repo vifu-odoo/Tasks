@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_picking_batch_dock_tree" model="ir.ui.view">
+        <field name="name">stock.picking.batch.dock.tree</field>
+        <field name="model">stock.picking.batch.dock</field>
+        <field name="arch" type="xml">
+            <tree string="Dock">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_stock_picking_batch_dock_form" model="ir.actions.act_window">
+            <field name="name">Docks</field>
+            <field name="res_model">stock.picking.batch.dock</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_stock_picking_batch_dock_tree"/>
+        </record>
+
+    <!-- <menuitem action="action_stock_picking_batch_dock_form" id="menu_action_stock_picking_batch_dock_form" parent="stock.menu_stock_transfers"/> -->
+</odoo>
