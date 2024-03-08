@@ -52,7 +52,7 @@
         <field name="arch" type="xml">
             <gantt date_start="scheduled_date" date_stop="scheduled_date" string="Transport Operations" default_group_by='dock_id,vehicle' default_scale="week" thumbnails="{'vehicle': 'image_128'}" color="vehicle" decoration-info="state == 'draft'" decoration-success="state == 'done'">
                 <field name="state"/>
-                <field name="name"/>
+                <!-- <field name="name"/>
                 <field name="weight_progress"/>
                 <field name="volume_progress"/>
                 <templates>
@@ -60,12 +60,12 @@
                         <div class="row g-0">
                             <div class="col">
                                 <ul class="ps-1 mb-0 list-unstyled">
-                                    <li><strong><t t-esc="name"/></strong> <t t-esc="weight_progress"/> Kg <t t-esc="volume_progress"/> m^3</li>
+                                    <li><strong><t t-esc="name"/></strong> <t t-esc="weight_progress"/> Kg <t t-esc="volume_progress"/>m^3</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                </templates>    
+                </templates>     -->
             </gantt>
         </field>
     </record>

@@ -28,12 +28,12 @@ class StockPickingBatch(models.Model):
             total_picking_weight = sum(picking.picking_weight for picking in record.picking_ids)
             
             if record.vehicle_category.max_volume > 0:
-                record.volume_progress = (total_picking_volume / record.vehicle_category.max_volume) 
+                record.volume_progress = (total_picking_volume / record.vehicle_category.max_volume) * 100
             else:
                 record.volume_progress = 0.0
 
             if record.vehicle_category.max_weight > 0:
-                record.weight_progress = (total_picking_weight / record.vehicle_category.max_weight)
+                record.weight_progress = (total_picking_weight / record.vehicle_category.max_weight) * 100
             else:
                 record.weight_progress = 0.0
 
@@ -46,3 +46,11 @@ class StockPickingBatch(models.Model):
     def _compute_lines(self):
         for record in self:
             record.lines = len(record.move_line_ids)
+
+    @api.depends("weight_progress", "volume_progress")
+    def _compute_display_name(self):
+        for record in self:
+            formatted_weight = f"{record.total_weight:.2f}"
+            formatted_volume = f"{record.total_volume:.2f}"
+
+            record.display_name = (record.name + "(" + formatted_weight + "kg, " + formatted_volume + "m\u00b3)")
