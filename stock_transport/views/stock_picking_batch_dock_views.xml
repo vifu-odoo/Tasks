@@ -15,7 +15,6 @@
             <field name="res_model">stock.picking.batch.dock</field>
             <field name="view_mode">tree</field>
             <field name="view_id" ref="view_stock_picking_batch_dock_tree"/>
-        </record>
-
+    </record>
     <!-- <menuitem action="action_stock_picking_batch_dock_form" id="menu_action_stock_picking_batch_dock_form" parent="stock.menu_stock_transfers"/> -->
 </odoo>

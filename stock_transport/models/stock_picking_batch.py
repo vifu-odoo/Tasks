@@ -18,24 +18,20 @@ class StockPickingBatch(models.Model):
     @api.depends("picking_ids", "vehicle_category")
     def _compute_picking_volume_weight(self):
         for record in self:
-            record.total_volume = sum(picking.picking_volume for picking in record.picking_ids)
-            record.total_weight = sum(picking.picking_weight for picking in record.picking_ids)
+            record.total_volume = sum(record.picking_ids.mapped('picking_volume'))
+            record.total_weight = sum(record.picking_ids.mapped('picking_weight'))
 
     @api.depends("picking_ids", "vehicle_category")
     def _compute_volume_weight(self):
         for record in self:
-            total_picking_volume = sum(picking.picking_volume for picking in record.picking_ids)
-            total_picking_weight = sum(picking.picking_weight for picking in record.picking_ids)
+            total_picking_volume = sum(record.picking_ids.mapped('picking_volume'))
+            total_picking_weight = sum(record.picking_ids.mapped('picking_weight'))
             
-            if record.vehicle_category.max_volume > 0:
-                record.volume_progress = (total_picking_volume / record.vehicle_category.max_volume) * 100
-            else:
-                record.volume_progress = 0.0
-
-            if record.vehicle_category.max_weight > 0:
-                record.weight_progress = (total_picking_weight / record.vehicle_category.max_weight) * 100
-            else:
-                record.weight_progress = 0.0
+            max_volume = record.vehicle_category.max_volume
+            max_weight = record.vehicle_category.max_volume
+      
+            record.volume_progress = (total_picking_volume / record.vehicle_category.max_volume) * 100 if max_volume > 0 else 0.0
+            record.weight_progress = (total_picking_weight / record.vehicle_category.max_weight) * 100 if max_weight > 0 else 0.0 
 
     @api.depends("picking_ids")
     def _compute_transfer(self):
@@ -47,7 +43,7 @@ class StockPickingBatch(models.Model):
         for record in self:
             record.lines = len(record.move_line_ids)
 
-    @api.depends("weight_progress", "volume_progress")
+    @api.depends("name","total_weight", "total_volume")
     def _compute_display_name(self):
         for record in self:
             formatted_weight = f"{record.total_weight:.2f}"
